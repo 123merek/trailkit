@@ -35,11 +35,12 @@ export async function POST(request: NextRequest) {
   }
 
   const link = createPrototypeSmartLink(parsed.data);
+  const origin = new URL(request.url).origin;
 
   return NextResponse.json(
     {
       link,
-      shortUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/r/${link.slug}`,
+      shortUrl: `${origin}/r/${link.slug}`,
       note: "Prototype links are returned immediately. Persist them with Prisma in the sellable MVP.",
     },
     { status: 201 },

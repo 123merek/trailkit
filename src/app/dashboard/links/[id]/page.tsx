@@ -4,6 +4,7 @@ import { CopyButton } from "@/components/shared/CopyButton";
 import { FunnelChart } from "@/components/dashboard/FunnelChart";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { getEvents, getSmartLink } from "@/lib/sample-data";
+import { getSiteUrl } from "@/lib/site-url";
 import { conversionRate, formatCurrency, formatNumber, formatPercent } from "@/lib/utils";
 
 export default async function LinkDetailPage({
@@ -18,7 +19,7 @@ export default async function LinkDetailPage({
     notFound();
   }
 
-  const shortUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/r/${link.slug}`;
+  const shortUrl = `${getSiteUrl()}/r/${link.slug}`;
   const linkEvents = getEvents().filter((event) => event.smartLinkId === link.id);
   const funnel = [
     { name: "Clicks", value: link.metrics.clicks },
