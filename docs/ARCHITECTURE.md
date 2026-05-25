@@ -58,6 +58,14 @@ TrailKit is a Next.js App Router application with a marketing site, MVP dashboar
 - `POST /api/click/:slug`: record a click and return routing destination.
 - `POST /api/events/first-open`: accept a first-open event.
 - `POST /api/events/revenue`: accept a revenue event.
+- `POST /api/webhooks/revenuecat`: accept RevenueCat webhooks, verify the configured Authorization header, and dedupe by RevenueCat event id.
+- `POST /api/imports/revenue`: import revenue events from CSV.
+- `GET /api/links/:id/qr`: generate SVG or PNG QR codes for smart links.
+- `GET /api/payouts/export`: export payout estimates as CSV.
+- `GET /api/domains`: list branded-link custom domains.
+- `POST /api/domains`: create a custom domain verification record.
+- `POST /api/domains/:id/verify`: mark a custom domain verified in the MVP flow.
+- `GET /api/sdk/handshake`: return the first mobile SDK attribution handshake.
 - `GET /api/dashboard`: return funnel, revenue, and payout metrics.
 - `GET /api/partners`: return partner payout summaries.
 - `GET /api/events`: return event stream.

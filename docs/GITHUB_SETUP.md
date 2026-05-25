@@ -52,15 +52,15 @@ Use `--public` instead of `--private` when ready to launch publicly.
 
 ## First 10 GitHub Issues
 
-1. Add persistent smart link creation backed by Prisma.
-2. Implement authenticated workspace boundary.
-3. Add real click write path with IP hashing and retention policy.
-4. Build RevenueCat webhook ingestion and signature verification.
-5. Design first mobile SDK attribution handshake.
-6. Add QR code generation and download.
-7. Add CSV import for manual revenue matching.
-8. Add payout export by partner and date range.
-9. Add custom domain setup flow for branded links.
+1. Replace demo fallback metrics with fully persisted aggregate queries.
+2. Add Clerk, Supabase Auth, or NextAuth for real user login.
+3. Add background jobs for webhook processing after immediate 200 responses.
+4. Add RevenueCat subscriber API sync after webhook receipt.
+5. Build the first iOS SDK package.
+6. Build the first Android SDK package.
+7. Add custom-domain DNS TXT lookup before verification.
+8. Add payout approval workflow and export history.
+9. Add partner-facing read-only reports.
 10. Interview 10 beta app teams and record attribution workflows.
 
 ## Commit Conventions

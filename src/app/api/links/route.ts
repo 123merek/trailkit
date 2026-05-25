@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import {
-  createPrototypeSmartLink,
-  demoApp,
-  getSmartLinks,
-  sourceTypes,
-} from "@/lib/sample-data";
+import { createSmartLink, listSmartLinks } from "@/lib/data";
+import { demoApp, sourceTypes } from "@/lib/sample-data";
+import { getWorkspaceIdFromRequest } from "@/lib/security";
 
 const createSmartLinkSchema = z.object({
   name: z.string().min(2),
@@ -20,8 +17,10 @@ const createSmartLinkSchema = z.object({
   utmCampaign: z.string().optional(),
 });
 
-export async function GET() {
-  return NextResponse.json({ links: getSmartLinks() });
+export async function GET(request: NextRequest) {
+  const workspaceId = await getWorkspaceIdFromRequest(request);
+
+  return NextResponse.json({ links: await listSmartLinks(workspaceId) });
 }
 
 export async function POST(request: NextRequest) {
@@ -34,14 +33,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const link = createPrototypeSmartLink(parsed.data);
+  const workspaceId = await getWorkspaceIdFromRequest(request);
+  const { link, persisted } = await createSmartLink(parsed.data, workspaceId);
   const origin = new URL(request.url).origin;
 
   return NextResponse.json(
     {
       link,
       shortUrl: `${origin}/r/${link.slug}`,
-      note: "Prototype links are returned immediately. Persist them with Prisma in the sellable MVP.",
+      persisted,
+      note: persisted
+        ? "Smart link persisted to the active workspace."
+        : "Smart link returned from demo fallback because no writable database was available.",
     },
     { status: 201 },
   );

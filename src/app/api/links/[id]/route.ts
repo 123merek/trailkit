@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
-import { getEvents, getSmartLink } from "@/lib/sample-data";
+import { getSmartLink, listEvents } from "@/lib/data";
+import { getWorkspaceIdFromRequest } from "@/lib/security";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
-  const link = getSmartLink(id);
+  const workspaceId = await getWorkspaceIdFromRequest(request);
+  const link = await getSmartLink(id, workspaceId);
 
   if (!link) {
     return NextResponse.json({ error: "Smart link not found" }, { status: 404 });
@@ -14,6 +16,6 @@ export async function GET(
 
   return NextResponse.json({
     link,
-    events: getEvents().filter((event) => event.smartLinkId === link.id),
+    events: (await listEvents(workspaceId)).filter((event) => event.smartLinkId === link.id),
   });
 }

@@ -1,10 +1,10 @@
 import { LinkPerformanceTable } from "@/components/dashboard/LinkPerformanceTable";
 import { SmartLinkBuilder } from "@/components/dashboard/SmartLinkBuilder";
 import { SmartLinkCard } from "@/components/dashboard/SmartLinkCard";
-import { getSmartLinks } from "@/lib/sample-data";
+import { listSmartLinks } from "@/lib/data";
 
-export default function LinksPage() {
-  const links = getSmartLinks();
+export default async function LinksPage() {
+  const links = await listSmartLinks();
 
   return (
     <main className="px-4 py-6 md:px-8">

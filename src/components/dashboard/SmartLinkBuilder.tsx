@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2, Plus, Wand2 } from "lucide-react";
 import { demoApp, sourceTypes, type SourceType } from "@/lib/sample-data";
 import { slugify } from "@/lib/utils";
@@ -13,9 +14,12 @@ type CreatedLink = {
     name: string;
   };
   shortUrl: string;
+  persisted?: boolean;
+  note?: string;
 };
 
 export function SmartLinkBuilder() {
+  const router = useRouter();
   const [name, setName] = useState("Creator launch story");
   const [sourceType, setSourceType] = useState<SourceType>("Creator");
   const [sourceName, setSourceName] = useState("New Partner");
@@ -45,6 +49,7 @@ export function SmartLinkBuilder() {
 
     setCreated(await response.json());
     setLoading(false);
+    router.refresh();
   }
 
   return (
@@ -107,6 +112,7 @@ export function SmartLinkBuilder() {
       {created?.shortUrl ? (
         <div className="mt-4 rounded-[8px] border border-success/20 bg-success/10 p-3">
           <p className="text-sm font-medium text-success">Prototype link created</p>
+          {created.note ? <p className="mt-1 text-xs text-muted">{created.note}</p> : null}
           <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <code className="break-all text-xs text-white">{created.shortUrl}</code>
             <CopyButton value={created.shortUrl} label="Copy link" />

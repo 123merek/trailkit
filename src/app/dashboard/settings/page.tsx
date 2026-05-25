@@ -1,8 +1,16 @@
 import { KeyRound, Link2, Smartphone, Webhook } from "lucide-react";
 import { demoApp } from "@/lib/sample-data";
 import { CopyButton } from "@/components/shared/CopyButton";
+import { CustomDomainPanel } from "@/components/dashboard/CustomDomainPanel";
+import { listCustomDomains } from "@/lib/data";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const domains = (await listCustomDomains()).map((domain) => ({
+    id: domain.id,
+    hostname: domain.hostname,
+    status: domain.status,
+    verification: domain.verification,
+  }));
   const fields = [
     { label: "App name", value: demoApp.name, icon: Smartphone },
     { label: "iOS App Store URL", value: demoApp.iosUrl, icon: Link2 },
@@ -53,6 +61,8 @@ export default function SettingsPage() {
           Authentication, real API-key hashing, webhook signature verification, and SDK event persistence are intentionally placeholders in this prototype.
         </p>
       </section>
+
+      <CustomDomainPanel initialDomains={domains} />
     </main>
   );
 }

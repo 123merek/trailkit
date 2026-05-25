@@ -3,7 +3,7 @@ import { BadgeDollarSign, CalendarDays, MousePointerClick, QrCode, Smartphone, S
 import { CopyButton } from "@/components/shared/CopyButton";
 import { FunnelChart } from "@/components/dashboard/FunnelChart";
 import { MetricCard } from "@/components/dashboard/MetricCard";
-import { getEvents, getSmartLink } from "@/lib/sample-data";
+import { getSmartLink, listEvents } from "@/lib/data";
 import { getSiteUrl } from "@/lib/site-url";
 import { conversionRate, formatCurrency, formatNumber, formatPercent } from "@/lib/utils";
 
@@ -13,14 +13,14 @@ export default async function LinkDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const link = getSmartLink(id);
+  const link = await getSmartLink(id);
 
   if (!link) {
     notFound();
   }
 
   const shortUrl = `${getSiteUrl()}/r/${link.slug}`;
-  const linkEvents = getEvents().filter((event) => event.smartLinkId === link.id);
+  const linkEvents = (await listEvents()).filter((event) => event.smartLinkId === link.id);
   const funnel = [
     { name: "Clicks", value: link.metrics.clicks },
     { name: "Store opens", value: link.metrics.storeOpens },
@@ -120,16 +120,23 @@ export default async function LinkDetailPage({
             <h2 className="text-lg font-semibold text-white">QR placeholder</h2>
           </div>
           <div className="mt-5 grid aspect-square place-items-center rounded-[8px] border border-white/10 bg-black/20">
-            <div className="grid grid-cols-5 gap-1">
-              {Array.from({ length: 25 }).map((_, index) => (
-                <div
-                  key={index}
-                  className={`h-5 w-5 rounded-[3px] ${index % 2 === 0 || index % 7 === 0 ? "bg-primary" : "bg-white/10"}`}
-                />
-              ))}
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`/api/links/${link.id}/qr`} alt={`QR code for ${link.name}`} className="h-56 w-56 rounded-[8px] bg-white p-3" />
           </div>
-          <p className="mt-4 text-sm leading-6 text-muted">Generate downloadable QR codes in Phase 2.</p>
+          <div className="mt-4 flex gap-2">
+            <a
+              href={`/api/links/${link.id}/qr?format=png`}
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-[8px] border border-white/10 text-sm font-semibold text-white transition hover:border-primary/40 hover:bg-primary/10"
+            >
+              Download PNG
+            </a>
+            <a
+              href={`/api/links/${link.id}/qr`}
+              className="inline-flex h-10 flex-1 items-center justify-center rounded-[8px] border border-white/10 text-sm font-semibold text-white transition hover:border-primary/40 hover:bg-primary/10"
+            >
+              Open SVG
+            </a>
+          </div>
         </div>
       </section>
     </main>

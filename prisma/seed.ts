@@ -1,8 +1,19 @@
 import { PrismaClient } from "@prisma/client";
+import { createHash } from "node:crypto";
 
 const prisma = new PrismaClient();
+const demoApiKey = process.env.TRAILKIT_API_KEY ?? "tk_test_replace_me";
+
+function sha256(value: string) {
+  return createHash("sha256").update(value).digest("hex");
+}
 
 async function main() {
+  await prisma.csvImport.deleteMany();
+  await prisma.customDomain.deleteMany();
+  await prisma.authSession.deleteMany();
+  await prisma.workspaceMember.deleteMany();
+  await prisma.user.deleteMany();
   await prisma.payoutEstimate.deleteMany();
   await prisma.payoutRule.deleteMany();
   await prisma.revenueEvent.deleteMany();
@@ -21,7 +32,28 @@ async function main() {
       apiKeys: {
         create: {
           name: "Demo ingest key",
-          keyHash: "sha256:demo-placeholder",
+          keyHash: sha256(demoApiKey),
+          prefix: demoApiKey.slice(0, 8),
+          scopes: "links:write,events:write,exports:read",
+        },
+      },
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: "founder@trailkit.dev",
+      name: "TrailKit Founder",
+      memberships: {
+        create: {
+          workspaceId: workspace.id,
+          role: "owner",
+        },
+      },
+      sessions: {
+        create: {
+          tokenHash: sha256("demo-session"),
+          expiresAt: new Date("2027-01-01T00:00:00.000Z"),
         },
       },
     },
@@ -38,6 +70,16 @@ async function main() {
       customDomain: "go.focusforge.app",
       revenueWebhookUrl: "https://trailkit.dev/api/events/revenue",
       sdkStatus: "mocked",
+    },
+  });
+
+  await prisma.customDomain.create({
+    data: {
+      workspaceId: workspace.id,
+      appId: app.id,
+      hostname: "go.focusforge.app",
+      status: "pending",
+      verification: `trailkit-verify=${workspace.id.slice(0, 10)}`,
     },
   });
 

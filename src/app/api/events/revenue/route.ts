@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { getSmartLink } from "@/lib/sample-data";
+import { recordRevenue } from "@/lib/data";
 
 const revenueSchema = z.object({
   smartLinkId: z.string().optional(),
@@ -10,6 +10,7 @@ const revenueSchema = z.object({
   currency: z.string().min(3).max(3).default("USD"),
   productId: z.string().optional(),
   source: z.string().default("Manual import"),
+  externalId: z.string().optional(),
   occurredAt: z.string().datetime().optional(),
 });
 
@@ -23,10 +24,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const idOrSlug = parsed.data.smartLinkId ?? parsed.data.slug;
-  const link = idOrSlug ? getSmartLink(idOrSlug) : undefined;
+  const result = await recordRevenue(parsed.data);
 
-  if (!link) {
+  if (!result) {
     return NextResponse.json(
       {
         error: "Smart link not found",
@@ -40,24 +40,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(
     {
       accepted: true,
-      event: {
-        id: `evt_revenue_${Date.now()}`,
-        smartLinkId: link.id,
-        customerId: parsed.data.customerId,
-        amount: parsed.data.amount,
-        currency: parsed.data.currency,
-        productId: parsed.data.productId,
-        source: parsed.data.source,
-        occurredAt: parsed.data.occurredAt ?? new Date().toISOString(),
-      },
-      payoutEstimate:
-        link.partnerId && link.metrics.revenue > 0
-          ? {
-              partnerId: link.partnerId,
-              basis: "Demo estimate only",
-              amount: Math.round(parsed.data.amount * 15) / 100,
-            }
-          : null,
+      ...result,
     },
     { status: 202 },
   );

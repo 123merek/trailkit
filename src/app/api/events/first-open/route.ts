@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { getSmartLink } from "@/lib/sample-data";
+import { recordFirstOpen } from "@/lib/data";
 
 const firstOpenSchema = z.object({
   smartLinkId: z.string().optional(),
@@ -20,10 +20,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const idOrSlug = parsed.data.smartLinkId ?? parsed.data.slug;
-  const link = idOrSlug ? getSmartLink(idOrSlug) : undefined;
+  const event = await recordFirstOpen(parsed.data);
 
-  if (!link) {
+  if (!event) {
     return NextResponse.json(
       {
         error: "Smart link not found",
@@ -37,13 +36,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(
     {
       accepted: true,
-      event: {
-        id: `evt_first_open_${Date.now()}`,
-        eventType: "first_open",
-        smartLinkId: link.id,
-        anonymousUserId: parsed.data.anonymousUserId,
-        occurredAt: parsed.data.occurredAt ?? new Date().toISOString(),
-      },
+      event,
     },
     { status: 202 },
   );

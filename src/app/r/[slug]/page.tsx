@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { RedirectInterstitial } from "@/components/dashboard/RedirectInterstitial";
-import { getSmartLink } from "@/lib/sample-data";
+import { getSmartLink } from "@/lib/data";
 import { getDestinationForUserAgent } from "@/lib/utils";
 
 export default async function RedirectPage({
@@ -10,7 +10,7 @@ export default async function RedirectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const link = getSmartLink(slug);
+  const link = await getSmartLink(slug);
 
   if (!link) {
     notFound();

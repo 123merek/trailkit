@@ -13,13 +13,13 @@ import { LinkPerformanceTable } from "@/components/dashboard/LinkPerformanceTabl
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { PartnerPayoutCard } from "@/components/dashboard/PartnerPayoutCard";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
-import { getDashboardMetrics, getPartners, getSmartLinks } from "@/lib/sample-data";
+import { getDashboardMetrics, listPartners, listSmartLinks } from "@/lib/data";
 import { formatCurrency, formatNumber, formatPercent } from "@/lib/utils";
 
-export default function DashboardPage() {
-  const dashboard = getDashboardMetrics();
-  const links = getSmartLinks();
-  const partners = getPartners();
+export default async function DashboardPage() {
+  const dashboard = await getDashboardMetrics();
+  const links = await listSmartLinks();
+  const partners = await listPartners();
 
   return (
     <main className="px-4 py-6 md:px-8">

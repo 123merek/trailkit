@@ -1,5 +1,5 @@
 import { BadgeDollarSign, CircleDot, MousePointerClick, Smartphone, Store } from "lucide-react";
-import { getEvents } from "@/lib/sample-data";
+import { listEvents } from "@/lib/data";
 import { formatCurrency } from "@/lib/utils";
 
 const iconMap = {
@@ -13,8 +13,8 @@ const iconMap = {
   payout_calculated: BadgeDollarSign,
 };
 
-export default function EventsPage() {
-  const events = getEvents();
+export default async function EventsPage() {
+  const events = await listEvents();
 
   return (
     <main className="px-4 py-6 md:px-8">

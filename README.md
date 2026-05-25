@@ -47,6 +47,10 @@ npm run db:seed
 DATABASE_URL="file:./dev.db"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 TRAILKIT_API_KEY="tk_test_replace_me"
+TRAILKIT_REQUIRE_API_KEY="false"
+IP_HASH_SALT="replace-with-random-secret"
+CLICK_RETENTION_DAYS="180"
+REVENUECAT_WEBHOOK_AUTH="Bearer replace_with_revenuecat_webhook_secret"
 ```
 
 For production, use a managed PostgreSQL database and update `prisma/schema.prisma` provider to `postgresql` before creating production migrations.
@@ -70,6 +74,14 @@ For production, use a managed PostgreSQL database and update `prisma/schema.pris
 - `POST /api/click/:slug`
 - `POST /api/events/first-open`
 - `POST /api/events/revenue`
+- `POST /api/webhooks/revenuecat`
+- `POST /api/imports/revenue`
+- `GET /api/links/:id/qr`
+- `GET /api/payouts/export`
+- `GET /api/domains`
+- `POST /api/domains`
+- `POST /api/domains/:id/verify`
+- `GET /api/sdk/handshake`
 - `GET /api/dashboard`
 - `GET /api/partners`
 - `GET /api/events`
@@ -89,6 +101,10 @@ Production environment variables:
 DATABASE_URL="<managed-postgres-url>"
 NEXT_PUBLIC_APP_URL="https://your-domain.com"
 TRAILKIT_API_KEY="<generated-api-key>"
+TRAILKIT_REQUIRE_API_KEY="true"
+IP_HASH_SALT="<random-secret>"
+CLICK_RETENTION_DAYS="180"
+REVENUECAT_WEBHOOK_AUTH="Bearer <revenuecat-webhook-secret>"
 ```
 
 CLI deployment:
@@ -105,12 +121,13 @@ vercel --prod
 
 ## MVP Limitations
 
-- Demo data powers the public prototype UI for reliability.
-- Prisma schema and seed data are ready for local database validation, but dashboard persistence is not fully wired yet.
-- Click tracking is privacy-conscious and simulated; it does not store raw IP addresses or use fingerprinting.
+- Demo data remains as a fallback when no writable database is available.
+- Smart links, clicks, first-open events, revenue events, CSV imports, custom domains, and payout estimates are Prisma-backed locally.
+- Click tracking is privacy-conscious; it stores a salted IP hash with retention metadata and does not use fingerprinting.
 - First-open attribution requires a future mobile SDK or durable event integration.
 - Revenue matching is an estimate until real app events and customer IDs are connected.
 - Payouts are estimates for review, not automated money movement.
+- QR generation is available for smart links, with SVG and PNG output.
 
 ## Docs
 
@@ -120,3 +137,4 @@ vercel --prod
 - [GitHub setup](docs/GITHUB_SETUP.md)
 - [Brand system](docs/BRAND.md)
 - [Design prompts](docs/DESIGN_PROMPTS.md)
+- [SDK handshake](docs/SDK_HANDSHAKE.md)

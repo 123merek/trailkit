@@ -8,13 +8,46 @@ datasource db {
 }
 
 model Workspace {
-  id        String     @id @default(cuid())
-  name      String
-  createdAt DateTime   @default(now())
-  apps      App[]
-  partners  Partner[]
-  campaigns Campaign[]
-  apiKeys   ApiKey[]
+  id            String            @id @default(cuid())
+  name          String
+  createdAt     DateTime          @default(now())
+  apps          App[]
+  partners      Partner[]
+  campaigns     Campaign[]
+  apiKeys       ApiKey[]
+  members       WorkspaceMember[]
+  customDomains CustomDomain[]
+  csvImports    CsvImport[]
+}
+
+model User {
+  id          String            @id @default(cuid())
+  email       String            @unique
+  name        String?
+  createdAt   DateTime          @default(now())
+  memberships WorkspaceMember[]
+  sessions    AuthSession[]
+}
+
+model WorkspaceMember {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        String    @default("owner")
+  createdAt   DateTime  @default(now())
+
+  @@unique([workspaceId, userId])
+}
+
+model AuthSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model App {
@@ -31,6 +64,7 @@ model App {
   sdkStatus         String      @default("mocked")
   createdAt         DateTime    @default(now())
   smartLinks        SmartLink[]
+  customDomains     CustomDomain[]
 }
 
 model Partner {
@@ -95,6 +129,8 @@ model Click {
   country     String?
   deviceType  String?
   destination String
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
 }
 
 model AttributionEvent {
@@ -116,7 +152,10 @@ model RevenueEvent {
   currency    String    @default("USD")
   productId   String?
   source      String
+  externalId  String?
   occurredAt  DateTime  @default(now())
+
+  @@unique([source, externalId])
 }
 
 model PayoutRule {
@@ -148,6 +187,33 @@ model ApiKey {
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   name        String
   keyHash     String
+  prefix      String?
+  scopes      String?
   lastUsedAt  DateTime?
+  expiresAt   DateTime?
   createdAt   DateTime  @default(now())
+}
+
+model CustomDomain {
+  id           String    @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  appId        String
+  app          App       @relation(fields: [appId], references: [id], onDelete: Cascade)
+  hostname     String    @unique
+  status       String    @default("pending")
+  verification String
+  createdAt    DateTime  @default(now())
+  verifiedAt   DateTime?
+}
+
+model CsvImport {
+  id           String    @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  filename     String
+  rowsReceived Int
+  rowsAccepted Int
+  rowsRejected Int
+  createdAt    DateTime  @default(now())
 }

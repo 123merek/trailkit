@@ -1,9 +1,9 @@
 import { PartnerPayoutCard } from "@/components/dashboard/PartnerPayoutCard";
-import { getPartners } from "@/lib/sample-data";
+import { listPartners } from "@/lib/data";
 import { formatCurrency } from "@/lib/utils";
 
-export default function PartnersPage() {
-  const partners = getPartners();
+export default async function PartnersPage() {
+  const partners = await listPartners();
   const payoutTotal = partners.reduce((sum, partner) => sum + partner.estimatedPayout, 0);
   const revenueTotal = partners.reduce((sum, partner) => sum + partner.revenueAttributed, 0);
 
@@ -27,6 +27,14 @@ export default function PartnersPage() {
             <p className="metric-tabular mt-1 text-xl font-semibold text-white">{formatCurrency(payoutTotal)}</p>
           </div>
         </div>
+      </div>
+      <div className="mt-6 flex justify-end">
+        <a
+          href="/api/payouts/export"
+          className="inline-flex h-10 items-center justify-center rounded-[8px] bg-primary px-4 text-sm font-semibold text-ink transition hover:bg-white"
+        >
+          Export payout CSV
+        </a>
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {partners.map((partner) => (
