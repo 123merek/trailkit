@@ -28,9 +28,7 @@ function toSourceType(value: string): SourceType {
   return sourceTypeSet.has(value) ? (value as SourceType) : "Custom campaign";
 }
 
-function demoMetricsForSlug(slug: string) {
-  return getSampleSmartLink(slug)?.metrics;
-}
+type PersistedMetrics = SmartLink["metrics"];
 
 function mapSmartLink(row: {
   id: string;
@@ -49,27 +47,7 @@ function mapSmartLink(row: {
   utmMedium: string | null;
   utmCampaign: string | null;
   createdAt: Date;
-  clicks?: unknown[];
-  events?: { eventType: string }[];
-  revenueEvents?: { amount: number }[];
-  payoutEstimates?: { payoutAmount: number }[];
-}): SmartLink {
-  const demoMetrics = demoMetricsForSlug(row.slug);
-  const events = row.events ?? [];
-  const revenue = row.revenueEvents?.reduce((sum, event) => sum + event.amount, 0) ?? 0;
-  const payout = row.payoutEstimates?.reduce((sum, estimate) => sum + estimate.payoutAmount, 0) ?? 0;
-  const metrics =
-    demoMetrics ??
-    {
-      clicks: row.clicks?.length ?? 0,
-      storeOpens: events.filter((event) => event.eventType === "store_open").length,
-      installs: events.filter((event) => event.eventType === "first_open").length,
-      trials: events.filter((event) => event.eventType === "trial_started").length,
-      subscriptions: events.filter((event) => event.eventType === "subscription_started").length,
-      revenue,
-      payout,
-    };
-
+}, metrics: PersistedMetrics): SmartLink {
   return {
     id: row.id,
     slug: row.slug,
@@ -88,6 +66,103 @@ function mapSmartLink(row: {
     createdAt: row.createdAt.toISOString(),
     metrics,
   };
+}
+
+function emptyMetrics(): PersistedMetrics {
+  return {
+    clicks: 0,
+    storeOpens: 0,
+    installs: 0,
+    trials: 0,
+    subscriptions: 0,
+    revenue: 0,
+    payout: 0,
+  };
+}
+
+async function getMetricsBySmartLinkId(smartLinkIds: string[]) {
+  const metrics = new Map<string, PersistedMetrics>();
+
+  for (const id of smartLinkIds) {
+    metrics.set(id, emptyMetrics());
+  }
+
+  if (!smartLinkIds.length) {
+    return metrics;
+  }
+
+  const [clickCounts, eventCounts, revenueTotals, payoutTotals] = await Promise.all([
+    getPrisma().click.groupBy({
+      by: ["smartLinkId"],
+      where: { smartLinkId: { in: smartLinkIds } },
+      _count: { id: true },
+    }),
+    getPrisma().attributionEvent.groupBy({
+      by: ["smartLinkId", "eventType"],
+      where: { smartLinkId: { in: smartLinkIds } },
+      _count: { id: true },
+    }),
+    getPrisma().revenueEvent.groupBy({
+      by: ["smartLinkId"],
+      where: { smartLinkId: { in: smartLinkIds } },
+      _sum: { amount: true },
+    }),
+    getPrisma().payoutEstimate.groupBy({
+      by: ["smartLinkId"],
+      where: { smartLinkId: { in: smartLinkIds } },
+      _sum: { payoutAmount: true },
+    }),
+  ]);
+
+  for (const count of clickCounts) {
+    const current = metrics.get(count.smartLinkId);
+
+    if (current) {
+      current.clicks = count._count.id;
+    }
+  }
+
+  for (const event of eventCounts) {
+    const current = metrics.get(event.smartLinkId);
+
+    if (!current) {
+      continue;
+    }
+
+    if (event.eventType === "store_open") {
+      current.storeOpens = event._count.id;
+    }
+
+    if (event.eventType === "first_open") {
+      current.installs = event._count.id;
+    }
+
+    if (event.eventType === "trial_started") {
+      current.trials = event._count.id;
+    }
+
+    if (event.eventType === "subscription_started") {
+      current.subscriptions = event._count.id;
+    }
+  }
+
+  for (const revenue of revenueTotals) {
+    const current = metrics.get(revenue.smartLinkId);
+
+    if (current) {
+      current.revenue = revenue._sum.amount ?? 0;
+    }
+  }
+
+  for (const payout of payoutTotals) {
+    const current = metrics.get(payout.smartLinkId);
+
+    if (current) {
+      current.payout = payout._sum.payoutAmount ?? 0;
+    }
+  }
+
+  return metrics;
 }
 
 async function getDefaultApp(workspaceId: string | null) {
@@ -114,15 +189,12 @@ export async function listSmartLinks(workspaceId?: string | null) {
       include: {
         campaign: true,
         partner: true,
-        clicks: true,
-        events: true,
-        revenueEvents: true,
-        payoutEstimates: true,
       },
       orderBy: { createdAt: "desc" },
     });
+    const metrics = await getMetricsBySmartLinkId(rows.map((row) => row.id));
 
-    return rows.length ? rows.map(mapSmartLink) : getSampleSmartLinks();
+    return rows.length ? rows.map((row) => mapSmartLink(row, metrics.get(row.id) ?? emptyMetrics())) : getSampleSmartLinks();
   } catch {
     return getSampleSmartLinks();
   }
@@ -138,14 +210,16 @@ export async function getSmartLink(idOrSlug: string, workspaceId?: string | null
       include: {
         campaign: true,
         partner: true,
-        clicks: true,
-        events: true,
-        revenueEvents: true,
-        payoutEstimates: true,
       },
     });
 
-    return row ? mapSmartLink(row) : getSampleSmartLink(idOrSlug);
+    if (!row) {
+      return getSampleSmartLink(idOrSlug);
+    }
+
+    const metrics = await getMetricsBySmartLinkId([row.id]);
+
+    return mapSmartLink(row, metrics.get(row.id) ?? emptyMetrics());
   } catch {
     return getSampleSmartLink(idOrSlug);
   }
@@ -221,14 +295,10 @@ export async function createSmartLink(
       include: {
         campaign: true,
         partner: true,
-        clicks: true,
-        events: true,
-        revenueEvents: true,
-        payoutEstimates: true,
       },
     });
 
-    return { link: mapSmartLink(row), persisted: true };
+    return { link: mapSmartLink(row, emptyMetrics()), persisted: true };
   } catch {
     return { link: createPrototypeSmartLink(input), persisted: false };
   }

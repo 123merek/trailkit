@@ -52,7 +52,7 @@ Use `--public` instead of `--private` when ready to launch publicly.
 
 ## First 10 GitHub Issues
 
-1. Replace demo fallback metrics with fully persisted aggregate queries.
+1. Add aggregate rollup tables for high-volume click and event reporting.
 2. Add Clerk, Supabase Auth, or NextAuth for real user login.
 3. Add background jobs for webhook processing after immediate 200 responses.
 4. Add RevenueCat subscriber API sync after webhook receipt.
