@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id        String     @id @default(cuid())
+  name      String
+  createdAt DateTime   @default(now())
+  apps      App[]
+  partners  Partner[]
+  campaigns Campaign[]
+  apiKeys   ApiKey[]
+}
+
+model App {
+  id                String      @id @default(cuid())
+  workspaceId       String
+  workspace         Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name              String
+  bundleId          String?
+  iosUrl            String
+  androidUrl        String
+  fallbackUrl       String
+  customDomain      String?
+  revenueWebhookUrl String?
+  sdkStatus         String      @default("mocked")
+  createdAt         DateTime    @default(now())
+  smartLinks        SmartLink[]
+}
+
+model Partner {
+  id              String           @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name            String
+  type            String
+  email           String?
+  status          String           @default("active")
+  createdAt       DateTime         @default(now())
+  smartLinks      SmartLink[]
+  payoutRules     PayoutRule[]
+  payoutEstimates PayoutEstimate[]
+}
+
+model Campaign {
+  id          String      @id @default(cuid())
+  workspaceId String
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  channel     String
+  startsAt    DateTime?
+  endsAt      DateTime?
+  smartLinks  SmartLink[]
+}
+
+model SmartLink {
+  id              String             @id @default(cuid())
+  appId           String
+  app             App                @relation(fields: [appId], references: [id], onDelete: Cascade)
+  slug            String             @unique
+  name            String
+  sourceType      String
+  sourceName      String
+  campaignName    String?
+  campaignId      String?
+  campaign        Campaign?          @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  partnerId       String?
+  partner         Partner?           @relation(fields: [partnerId], references: [id], onDelete: SetNull)
+  iosUrl          String
+  androidUrl      String
+  fallbackUrl     String
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  createdAt       DateTime           @default(now())
+  clicks          Click[]
+  events          AttributionEvent[]
+  revenueEvents   RevenueEvent[]
+  payoutEstimates PayoutEstimate[]
+}
+
+model Click {
+  id          String    @id @default(cuid())
+  smartLinkId String
+  smartLink   SmartLink @relation(fields: [smartLinkId], references: [id], onDelete: Cascade)
+  timestamp   DateTime  @default(now())
+  userAgent   String?
+  ipHash      String?
+  referrer    String?
+  country     String?
+  deviceType  String?
+  destination String
+}
+
+model AttributionEvent {
+  id              String    @id @default(cuid())
+  smartLinkId     String
+  smartLink       SmartLink @relation(fields: [smartLinkId], references: [id], onDelete: Cascade)
+  eventType       String
+  anonymousUserId String?
+  occurredAt      DateTime  @default(now())
+  metadata        String?
+}
+
+model RevenueEvent {
+  id          String    @id @default(cuid())
+  smartLinkId String
+  smartLink   SmartLink @relation(fields: [smartLinkId], references: [id], onDelete: Cascade)
+  customerId  String
+  amount      Float
+  currency    String    @default("USD")
+  productId   String?
+  source      String
+  occurredAt  DateTime  @default(now())
+}
+
+model PayoutRule {
+  id                String   @id @default(cuid())
+  partnerId         String
+  partner           Partner  @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  ruleType          String
+  commissionPercent Float?
+  fixedAmount       Float?
+  appliesTo         String
+  createdAt         DateTime @default(now())
+}
+
+model PayoutEstimate {
+  id            String    @id @default(cuid())
+  partnerId     String
+  partner       Partner   @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  smartLinkId   String
+  smartLink     SmartLink @relation(fields: [smartLinkId], references: [id], onDelete: Cascade)
+  revenueAmount Float
+  payoutAmount  Float
+  status        String    @default("estimated")
+  createdAt     DateTime  @default(now())
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  keyHash     String
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+}

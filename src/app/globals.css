@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #05070d;
+  --foreground: #eef6ff;
+  --card: #0b1020;
+  --card-elevated: #10182d;
+  --muted: #9aa8bd;
+  --border: rgba(154, 168, 189, 0.18);
+  --primary: #2fd4ff;
+  --primary-strong: #0ea5e9;
+  --success: #55f0b0;
+  --warning: #ffc766;
+  --danger: #ff6b7a;
+  --ink: #05070d;
+  --grid-line: rgba(47, 212, 255, 0.09);
+  --glow-cyan: rgba(47, 212, 255, 0.28);
+  --glow-green: rgba(85, 240, 176, 0.22);
+  --glow-amber: rgba(255, 199, 102, 0.2);
+  --radius-card: 8px;
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-card: var(--card);
+  --color-card-elevated: var(--card-elevated);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  min-width: 320px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(47, 212, 255, 0.28);
+  color: #ffffff;
+}
+
+.gradient-grid {
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(circle at 20% 15%, var(--glow-cyan), transparent 34%),
+    radial-gradient(circle at 80% 10%, var(--glow-green), transparent 28%),
+    radial-gradient(circle at 58% 82%, var(--glow-amber), transparent 30%),
+    var(--background);
+  background-size: 44px 44px, 44px 44px, auto, auto, auto, auto;
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(16, 24, 45, 0.82), rgba(8, 12, 24, 0.78));
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.metric-tabular {
+  font-variant-numeric: tabular-nums;
 }

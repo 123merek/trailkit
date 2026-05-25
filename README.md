@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TrailKit
 
-## Getting Started
+Track every app growth link from click to install to revenue.
 
-First, run the development server:
+TrailKit is a lightweight mobile attribution and payout infrastructure MVP for app teams. It helps teams create smart links for creators, affiliates, campaigns, emails, website buttons, QR codes, landing pages, and referral partners, then estimate which links drive installs, trials, subscriptions, purchases, renewals, revenue, and partner payouts.
+
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide icons
+- Recharts
+- Prisma ORM
+- SQLite local fallback, PostgreSQL-ready schema shape
+- Vercel-ready deployment
+
+## Local Setup
+
+```bash
+npm install
+cp .env.example .env
+npm run db:generate
+npm run db:push
+npm run db:seed
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run db:push
+npm run db:seed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+DATABASE_URL="file:./dev.db"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+TRAILKIT_API_KEY="tk_test_replace_me"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+For production, use a managed PostgreSQL database and update `prisma/schema.prisma` provider to `postgresql` before creating production migrations.
 
-## Learn More
+## MVP Routes
 
-To learn more about Next.js, take a look at the following resources:
+- `/`: public landing site.
+- `/dashboard`: overview dashboard.
+- `/dashboard/links`: smart link list and prototype creator.
+- `/dashboard/links/:id`: link detail page.
+- `/dashboard/partners`: partner payout estimates.
+- `/dashboard/events`: attribution event stream.
+- `/dashboard/settings`: app and integration settings.
+- `/r/demo-creator`: demo smart link redirect.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Routes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `GET /api/links`
+- `POST /api/links`
+- `GET /api/links/:id`
+- `POST /api/click/:slug`
+- `POST /api/events/first-open`
+- `POST /api/events/revenue`
+- `GET /api/dashboard`
+- `GET /api/partners`
+- `GET /api/events`
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vercel import settings:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Framework preset: Next.js
+- Install command: `npm install`
+- Build command: `npm run build`
+- Output directory: Next.js default
+
+Production environment variables:
+
+```bash
+DATABASE_URL="<managed-postgres-url>"
+NEXT_PUBLIC_APP_URL="https://your-domain.com"
+TRAILKIT_API_KEY="<generated-api-key>"
+```
+
+CLI deployment:
+
+```bash
+npm install -g vercel
+vercel login
+vercel link
+vercel env add DATABASE_URL production
+vercel env add NEXT_PUBLIC_APP_URL production
+vercel env add TRAILKIT_API_KEY production
+vercel --prod
+```
+
+## MVP Limitations
+
+- Demo data powers the public prototype UI for reliability.
+- Prisma schema and seed data are ready for local database validation, but dashboard persistence is not fully wired yet.
+- Click tracking is privacy-conscious and simulated; it does not store raw IP addresses or use fingerprinting.
+- First-open attribution requires a future mobile SDK or durable event integration.
+- Revenue matching is an estimate until real app events and customer IDs are connected.
+- Payouts are estimates for review, not automated money movement.
+
+## Docs
+
+- [PRD](docs/PRD.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [GitHub setup](docs/GITHUB_SETUP.md)
+- [Brand system](docs/BRAND.md)
+- [Design prompts](docs/DESIGN_PROMPTS.md)

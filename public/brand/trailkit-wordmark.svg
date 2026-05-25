@@ -1,0 +1,17 @@
+<svg width="316" height="72" viewBox="0 0 316 72" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">TrailKit wordmark</title>
+  <desc id="desc">TrailKit wordmark in a clean technical style.</desc>
+  <text x="4" y="51" fill="#EEF6FF" font-family="Inter, Geist, ui-sans-serif, system-ui, sans-serif" font-size="48" font-weight="760">Trail</text>
+  <text x="124" y="51" fill="#2FD4FF" font-family="Inter, Geist, ui-sans-serif, system-ui, sans-serif" font-size="48" font-weight="760">Kit</text>
+  <path d="M219 21C229 21 232 48 245 48C256 48 257 30 274 30" stroke="url(#trail)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="219" cy="21" r="6" fill="#05070D" stroke="#2FD4FF" stroke-width="4"/>
+  <circle cx="245" cy="48" r="6" fill="#05070D" stroke="#55F0B0" stroke-width="4"/>
+  <circle cx="274" cy="30" r="6" fill="#05070D" stroke="#FFC766" stroke-width="4"/>
+  <defs>
+    <linearGradient id="trail" x1="217" y1="22" x2="276" y2="31" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2FD4FF"/>
+      <stop offset="0.55" stop-color="#55F0B0"/>
+      <stop offset="1" stop-color="#FFC766"/>
+    </linearGradient>
+  </defs>
+</svg>

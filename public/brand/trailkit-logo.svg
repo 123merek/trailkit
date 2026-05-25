@@ -1,0 +1,18 @@
+<svg width="420" height="112" viewBox="0 0 420 112" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">TrailKit logo</title>
+  <desc id="desc">TrailKit logo with a connected click, install, revenue path mark.</desc>
+  <rect x="0" y="0" width="112" height="112" rx="24" fill="#05070D"/>
+  <path d="M24 72C37 72 41 40 56 40C70 40 72 63 89 63" stroke="url(#trail)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="24" cy="72" r="11" fill="#05070D" stroke="#2FD4FF" stroke-width="7"/>
+  <circle cx="56" cy="40" r="11" fill="#05070D" stroke="#55F0B0" stroke-width="7"/>
+  <circle cx="89" cy="63" r="11" fill="#05070D" stroke="#FFC766" stroke-width="7"/>
+  <text x="132" y="70" fill="#EEF6FF" font-family="Inter, Geist, ui-sans-serif, system-ui, sans-serif" font-size="54" font-weight="760">Trail</text>
+  <text x="267" y="70" fill="#2FD4FF" font-family="Inter, Geist, ui-sans-serif, system-ui, sans-serif" font-size="54" font-weight="760">Kit</text>
+  <defs>
+    <linearGradient id="trail" x1="21" y1="71" x2="94" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2FD4FF"/>
+      <stop offset="0.5" stop-color="#55F0B0"/>
+      <stop offset="1" stop-color="#FFC766"/>
+    </linearGradient>
+  </defs>
+</svg>

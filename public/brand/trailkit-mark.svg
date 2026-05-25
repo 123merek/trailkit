@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">TrailKit mark</title>
+  <desc id="desc">A connected trail of three nodes representing click, install, and revenue.</desc>
+  <rect width="128" height="128" rx="28" fill="#05070D"/>
+  <path d="M27 82C40.8 82 44.8 44 62.5 44C77.7 44 79.1 72 101 72" stroke="url(#trail)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="27" cy="82" r="13" fill="#05070D" stroke="#2FD4FF" stroke-width="8"/>
+  <circle cx="63" cy="44" r="13" fill="#05070D" stroke="#55F0B0" stroke-width="8"/>
+  <circle cx="101" cy="72" r="13" fill="#05070D" stroke="#FFC766" stroke-width="8"/>
+  <circle cx="27" cy="82" r="4" fill="#EAF7FF"/>
+  <circle cx="63" cy="44" r="4" fill="#EAF7FF"/>
+  <circle cx="101" cy="72" r="4" fill="#EAF7FF"/>
+  <defs>
+    <linearGradient id="trail" x1="24" y1="80" x2="105" y2="63" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2FD4FF"/>
+      <stop offset="0.5" stop-color="#55F0B0"/>
+      <stop offset="1" stop-color="#FFC766"/>
+    </linearGradient>
+  </defs>
+</svg>
