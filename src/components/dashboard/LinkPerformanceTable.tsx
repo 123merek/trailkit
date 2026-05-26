@@ -5,8 +5,8 @@ import { formatCurrency, formatNumber, formatPercent, conversionRate } from "@/l
 
 export function LinkPerformanceTable({ links }: { links: SmartLink[] }) {
   return (
-    <div className="overflow-hidden rounded-[8px] border border-white/10">
-      <div className="grid min-w-[880px] grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] bg-white/[0.04] px-4 py-3 text-xs font-semibold uppercase text-muted">
+    <div className="overflow-hidden rounded-[8px] border border-[#dfd4f4] bg-[#fffdf8]/76 shadow-[0_14px_35px_rgba(55,42,84,0.08)]">
+      <div className="grid min-w-[880px] grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] bg-[#eee6ff] px-4 py-3 text-xs font-semibold uppercase text-[#72668a]">
         <div>Smart link</div>
         <div>Source</div>
         <div>Clicks</div>
@@ -18,25 +18,25 @@ export function LinkPerformanceTable({ links }: { links: SmartLink[] }) {
       {links.map((link) => (
         <div
           key={link.id}
-          className="grid min-w-[880px] grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] items-center border-t border-white/10 px-4 py-3 text-sm"
+          className="grid min-w-[880px] grid-cols-[1.5fr_1fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] items-center border-t border-[#dfd4f4] px-4 py-3 text-sm"
         >
           <div>
-            <p className="font-medium text-white">{link.name}</p>
-            <p className="mt-1 font-mono text-xs text-muted">/r/{link.slug}</p>
+            <p className="font-medium text-[#372a54]">{link.name}</p>
+            <p className="mt-1 font-mono text-xs text-[#72668a]">/r/{link.slug}</p>
           </div>
           <div>
-            <p className="text-white">{link.sourceType}</p>
-            <p className="mt-1 text-xs text-muted">{link.sourceName}</p>
+            <p className="text-[#372a54]">{link.sourceType}</p>
+            <p className="mt-1 text-xs text-[#72668a]">{link.sourceName}</p>
           </div>
-          <div className="metric-tabular text-white">{formatNumber(link.metrics.clicks)}</div>
-          <div className="metric-tabular text-white">{formatNumber(link.metrics.installs)}</div>
-          <div className="metric-tabular text-white">{formatCurrency(link.metrics.revenue)}</div>
-          <div className="metric-tabular text-white">
+          <div className="metric-tabular text-[#372a54]">{formatNumber(link.metrics.clicks)}</div>
+          <div className="metric-tabular text-[#372a54]">{formatNumber(link.metrics.installs)}</div>
+          <div className="metric-tabular text-[#372a54]">{formatCurrency(link.metrics.revenue)}</div>
+          <div className="metric-tabular text-[#372a54]">
             {formatPercent(conversionRate(link.metrics.subscriptions, link.metrics.clicks))}
           </div>
           <Link
             href={`/dashboard/links/${link.id}`}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-white/10 text-muted transition hover:border-primary/50 hover:text-primary"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#dfd4f4] text-[#72668a] transition hover:border-[#765dff]/50 hover:text-[#765dff]"
             aria-label={`View ${link.name}`}
           >
             <ArrowUpRight className="h-4 w-4" />

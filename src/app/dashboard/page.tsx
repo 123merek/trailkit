@@ -31,7 +31,7 @@ export default async function DashboardPage() {
             Mocked workspace for FocusForge showing how smart links can connect source activity to installs, revenue, and payout estimates.
           </p>
         </div>
-        <div className="rounded-[8px] border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-muted">
+        <div className="rounded-full border border-[#dfd4f4] bg-[#fffdf8]/76 px-4 py-3 text-sm text-[#72668a]">
           Workspace: <span className="font-medium text-white">FocusForge Growth</span>
         </div>
       </div>
@@ -48,7 +48,7 @@ export default async function DashboardPage() {
       </section>
 
       <section className="mt-6 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[8px] border border-white/10 bg-white/[0.03] p-5">
+        <div className="rounded-[8px] border border-[#dfd4f4] bg-[#fffdf8]/76 p-5 shadow-[0_14px_35px_rgba(55,42,84,0.08)]">
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-semibold text-white">Revenue and installs</h2>
@@ -57,7 +57,7 @@ export default async function DashboardPage() {
           </div>
           <RevenueChart data={dashboard.revenueSeries} />
         </div>
-        <div className="rounded-[8px] border border-white/10 bg-white/[0.03] p-5">
+        <div className="rounded-[8px] border border-[#dfd4f4] bg-[#fffdf8]/76 p-5 shadow-[0_14px_35px_rgba(55,42,84,0.08)]">
           <h2 className="text-lg font-semibold text-white">Conversion funnel</h2>
           <p className="mt-1 text-sm text-muted">Click to subscription path.</p>
           <FunnelChart data={dashboard.funnel} />

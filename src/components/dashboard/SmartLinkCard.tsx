@@ -7,16 +7,16 @@ export function SmartLinkCard({ link }: { link: SmartLink }) {
   return (
     <Link
       href={`/dashboard/links/${link.id}`}
-      className="block rounded-[8px] border border-white/10 bg-white/[0.03] p-5 transition hover:border-primary/40 hover:bg-primary/[0.04]"
+      className="block rounded-[8px] border border-[#dfd4f4] bg-[#fffdf8]/76 p-5 shadow-[0_14px_35px_rgba(55,42,84,0.08)] transition hover:border-[#765dff]/40 hover:bg-[#f8f4ff]"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-lg font-semibold text-white">{link.name}</p>
-          <p className="mt-1 text-sm text-muted">{link.sourceType} / {link.campaign}</p>
+          <p className="text-lg font-semibold text-[#372a54]">{link.name}</p>
+          <p className="mt-1 text-sm text-[#72668a]">{link.sourceType} / {link.campaign}</p>
         </div>
-        <ArrowRight className="h-5 w-5 text-muted" />
+        <ArrowRight className="h-5 w-5 text-[#72668a]" />
       </div>
-      <p className="mt-4 rounded-[8px] border border-white/10 bg-black/10 px-3 py-2 font-mono text-xs text-primary">
+      <p className="mt-4 rounded-full border border-[#dfd4f4] bg-[#eee6ff] px-3 py-2 font-mono text-xs text-[#765dff]">
         /r/{link.slug}
       </p>
       <div className="mt-4 grid grid-cols-3 gap-2">
@@ -38,10 +38,10 @@ function SmallStat({
   value: string;
 }) {
   return (
-    <div className="rounded-[8px] border border-white/10 bg-black/10 p-3">
-      <Icon className="h-4 w-4 text-primary" />
-      <p className="mt-2 text-xs text-muted">{label}</p>
-      <p className="metric-tabular mt-1 truncate text-sm font-semibold text-white">{value}</p>
+    <div className="rounded-[8px] border border-[#dfd4f4] bg-[#f8f4ff] p-3">
+      <Icon className="h-4 w-4 text-[#765dff]" />
+      <p className="mt-2 text-xs text-[#72668a]">{label}</p>
+      <p className="metric-tabular mt-1 truncate text-sm font-semibold text-[#372a54]">{value}</p>
     </div>
   );
 }

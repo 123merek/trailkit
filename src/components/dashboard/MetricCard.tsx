@@ -14,24 +14,24 @@ export function MetricCard({
   tone?: "primary" | "success" | "warning" | "danger";
 }) {
   const toneClass = {
-    primary: "border-primary/30 bg-primary/10 text-primary",
-    success: "border-success/30 bg-success/10 text-success",
-    warning: "border-warning/30 bg-warning/10 text-warning",
+    primary: "border-[#765dff]/25 bg-[#765dff]/10 text-[#765dff]",
+    success: "border-[#35d894]/25 bg-[#9cf5c7]/34 text-[#287a55]",
+    warning: "border-[#ffc766]/30 bg-[#ffd979]/28 text-[#8a6114]",
     danger: "border-danger/30 bg-danger/10 text-danger",
   }[tone];
 
   return (
-    <div className="rounded-[8px] border border-white/10 bg-white/[0.03] p-4">
+    <div className="rounded-[8px] border border-[#dfd4f4] bg-[#fffdf8]/76 p-4 shadow-[0_14px_35px_rgba(55,42,84,0.08)]">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm text-muted">{label}</p>
-          <p className="metric-tabular mt-2 text-2xl font-semibold text-white">{value}</p>
+          <p className="text-sm text-[#72668a]">{label}</p>
+          <p className="metric-tabular mt-2 text-2xl font-semibold text-[#372a54]">{value}</p>
         </div>
-        <div className={cn("flex h-10 w-10 items-center justify-center rounded-[8px] border", toneClass)}>
+        <div className={cn("flex h-10 w-10 items-center justify-center rounded-full border", toneClass)}>
           <Icon className="h-5 w-5" />
         </div>
       </div>
-      {detail ? <p className="mt-3 text-xs text-muted">{detail}</p> : null}
+      {detail ? <p className="mt-3 text-xs text-[#72668a]">{detail}</p> : null}
     </div>
   );
 }

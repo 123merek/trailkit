@@ -1,6 +1,6 @@
 import { formatNumber } from "@/lib/utils";
 
-const colors = ["#2FD4FF", "#24CDE3", "#55F0B0", "#9BEF96", "#FFC766"];
+const colors = ["#765DFF", "#8F7BFF", "#35D894", "#9CF5C7", "#FFC766"];
 
 export function FunnelChart({ data }: { data: { name: string; value: number }[] }) {
   const max = Math.max(...data.map((item) => item.value), 1);
@@ -13,12 +13,12 @@ export function FunnelChart({ data }: { data: { name: string; value: number }[] 
         return (
           <div key={item.name}>
             <div className="mb-1.5 flex items-center justify-between gap-4 text-xs">
-              <span className="text-muted">{item.name}</span>
-              <span className="metric-tabular font-medium text-white">{formatNumber(item.value)}</span>
+              <span className="text-[#72668a]">{item.name}</span>
+              <span className="metric-tabular font-medium text-[#372a54]">{formatNumber(item.value)}</span>
             </div>
-            <div className="h-5 overflow-hidden rounded-[8px] bg-white/[0.06]">
+            <div className="h-5 overflow-hidden rounded-full bg-[#e6ddfa]">
               <div
-                className="h-full rounded-[8px]"
+                className="h-full rounded-full"
                 style={{
                   width: `${width}%`,
                   background: colors[index % colors.length],
