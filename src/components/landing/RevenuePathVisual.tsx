@@ -18,8 +18,8 @@ export function RevenuePathVisual() {
             <div className={`inline-flex h-10 w-10 items-center justify-center rounded-full border ${item.color}`}>
               <Icon className="h-4 w-4" />
             </div>
-            <p className="mt-5 text-xs uppercase text-[#72668a]">{item.label}</p>
-            <p className="metric-tabular mt-1 text-2xl font-semibold text-[#372a54]">{item.value}</p>
+            <p className="mt-5 text-xs uppercase text-[#666]">{item.label}</p>
+            <p className="metric-tabular mt-1 text-2xl font-semibold text-black">{item.value}</p>
           </div>
         );
       })}

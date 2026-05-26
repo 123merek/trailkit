@@ -100,9 +100,8 @@ textarea {
 }
 
 .trailkit-lp {
-  background:
-    linear-gradient(180deg, #fffaf2 0%, #f4ecff 42%, #fffdf8 100%);
-  color: var(--phantom-ink);
+  background: #ffffff;
+  color: #050505;
   color-scheme: light;
 }
 
@@ -129,10 +128,10 @@ textarea {
 }
 
 .lp-panel {
-  border: 1px solid rgba(81, 54, 232, 0.13);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  background: rgba(255, 253, 248, 0.78);
-  box-shadow: 0 22px 70px rgba(55, 42, 84, 0.11);
+  background: #ffffff;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.06);
 }
 
 .lp-soft-band {

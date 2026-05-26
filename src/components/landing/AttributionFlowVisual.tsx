@@ -12,7 +12,7 @@ const nodes = [
 
 export function AttributionFlowVisual() {
   return (
-    <div className="overflow-hidden rounded-[32px] border border-[#d8cdf7] bg-[#fffdf8]/78 p-4 shadow-2xl">
+    <div className="overflow-hidden rounded-[32px] border border-black/10 bg-white p-4 shadow-2xl">
       <div className="grid gap-3 sm:grid-cols-4">
         {nodes.map((node, index) => {
           const Icon = node.icon;
@@ -24,16 +24,16 @@ export function AttributionFlowVisual() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.08, duration: 0.35 }}
-              className="relative rounded-[8px] border border-[#e0d7f7] bg-[#f7f2ff] p-4"
+              className="relative rounded-[8px] border border-black/10 bg-[#f7f7f7] p-4"
             >
               <div className="flex items-center justify-between">
                 <Icon className={`h-5 w-5 ${node.color}`} />
                 {index < nodes.length - 1 ? (
-                  <ArrowRight className="hidden h-4 w-4 text-[#9a8abf] sm:block" />
+                  <ArrowRight className="hidden h-4 w-4 text-black/35 sm:block" />
                 ) : null}
               </div>
-              <p className="mt-5 text-sm font-semibold text-[#372a54]">{node.label}</p>
-              <p className="mt-1 text-xs text-[#72668a]">{node.detail}</p>
+              <p className="mt-5 text-sm font-semibold text-black">{node.label}</p>
+              <p className="mt-1 text-xs text-[#666]">{node.detail}</p>
             </motion.div>
           );
         })}
